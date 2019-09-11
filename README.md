@@ -1,2 +1,2 @@
 # Employee-leave-system
-create database LeaveManagementsystem and table structure is provided in dump.sql
+create database LeaveManagementsystem and dump the script files to database dump.sql.
