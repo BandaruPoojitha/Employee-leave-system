@@ -1,3 +1,8 @@
+<%@page import="com.cmi.lms.beans.Employee"%>
+<%@page import="java.util.Iterator"%>
+<%@page import="javax.servlet.jsp.tagext.IterationTag"%>
+<%@page import="com.cmi.lms.beans.Login"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 
@@ -77,29 +82,50 @@ legend {
 				</tr>
 				<tr>
 					<td>ManagerId::</td>
-					<td><input type="text" name="managerId" /></td>
+					<td><select name="managerId">
+					
+
+							<%
+							if(true){
+								Employee emp=new Employee();
+								emp.setEmployeeId("100");
+								Login log=new Login();
+								log.setEmployeeId(emp);
+								
+					ArrayList<Login> list= new ArrayList<>();//(ArrayList<Login>)request.getAttribute("empid");
+					list.add(log);
+					Iterator<Login> iterate=list.iterator();
+					while(iterate.hasNext()){
+						String empid=iterate.next().getEmployeeId().getEmployeeId();
+					out.print("<option value="+(char)34+ empid+(char)34+">"+empid+"</option>"); 
+					
+					}
+					
+					
+					}%>
+
+
+
+					</select></td>
 				</tr>
 				<tr>
 					<td>Address::</td>
 					<td><input type="text" name="address" /></td>
 				</tr>
 				<tr>
-					<td>Email::
-			</td>
-				<td><input type="text" name="email" /></td>
+					<td>Email::</td>
+					<td><input type="text" name="email" /></td>
 				</tr>
 				<tr>
-					<td>Contact number::
-				</td>
-				<td><input type="number" name="phonenumber" /></td>
+					<td>Contact number::</td>
+					<td><input type="number" name="phonenumber" /></td>
 				</tr>
 				<tr>
-					<td>
-				</td>
-				<td><input type="submit" name="add" value="Add" /></td>
+					<td></td>
+					<td><input type="submit" name="add" value="Add" /></td>
 				</tr>
-				</table>
+			</table>
 		</form>
-				</fieldset>
+	</fieldset>
 </body>
 </html>

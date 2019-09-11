@@ -18,8 +18,8 @@
 		<tr>
 			<td>
 				<%
-					Bean bean = new Bean();
-					if (session.getAttribute("role").equals("employee")) {
+					
+					if (session.getAttribute("role").equals("employee")||session.getAttribute("role").equals("admin")) {
 				%>
 
 				<fieldset>
@@ -49,7 +49,7 @@
 
 			</fieldset>
 			<%
-				}
+				}session.removeAttribute("adminchoice");
 			%>
 			<td><iframe width="800px" height="500px" src="/welcome.jsp"
 					name="iframe1"></iframe></td>

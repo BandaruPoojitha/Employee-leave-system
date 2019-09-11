@@ -2,12 +2,17 @@ package com.cmi.lms.controller;
 
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.cmi.lms.beans.ApplyLeave;
+import com.cmi.lms.beans.BalanceLeaves;
 import com.cmi.lms.service.EmployeeCallingRest;
 
 @Controller
@@ -21,31 +26,29 @@ public class EmployeeController {
 	}
 
 	@RequestMapping(value = "grantleave", method = RequestMethod.GET)
-	public ModelAndView grantEmployee() {
-		ArrayList<String> arraylist=employeecallingRest.grantLeave();
-		ModelAndView model = new ModelAndView("grantleave");
-		model.addObject("list", arraylist);
-		return model;
+	public String grantEmployee(HttpSession session) {
+		String empid=(String) session.getAttribute("empid");
+	ArrayList<ApplyLeave> arraylist=employeecallingRest.grantLeave(empid);
+
+		session.setAttribute("list", arraylist);
+		return "redirect:/grantleave.jsp";
 
 	}
 
 	@RequestMapping(value = "cancelleave", method = RequestMethod.GET)
-	public ModelAndView cancel() {
-		ArrayList<String> arraylist =employeecallingRest.cancelLeave();
-//		RestTemplate restTemplate = new RestTemplate();
-//		String uri = restURI.getURL()+"/employeerest/cancel";
-//		ArrayList<String> arraylist = restTemplate.getForObject(uri, ArrayList.class);
+	public ModelAndView cancel(HttpSession session) {
+		String empid=(String) session.getAttribute("empid");
+		ArrayList<ApplyLeave> arraylist =employeecallingRest.cancelLeave(empid);
 		ModelAndView model = new ModelAndView("cancelleave");
 		model.addObject("cancel", arraylist);
 		return model;
 	}
 
 	@RequestMapping(value = "track", method = RequestMethod.GET)
-	public ModelAndView trackLeave() {
-		ArrayList<String> arraylist =employeecallingRest.trackLeave();
-//		RestTemplate restTemplate = new RestTemplate();
-//		String uri =restURI.getURL()+"/employeerest/leavedetails";
-//		ArrayList<String> arraylist = restTemplate.getForObject(uri, ArrayList.class);
+	public ModelAndView trackLeave(HttpSession session) {
+		String empid=(String) session.getAttribute("empid");
+		
+		ArrayList<ApplyLeave> arraylist =employeecallingRest.trackLeave(empid);
 
 		ModelAndView model = new ModelAndView("TrackLeave");
 		model.addObject("track", arraylist);
@@ -53,11 +56,9 @@ public class EmployeeController {
 	}
 
 	@RequestMapping(value = "/balanceleaves", method = RequestMethod.GET)
-	public ModelAndView balanceLeaves() {
-		ArrayList<Integer> arraylist =employeecallingRest.balanceLeaves();
-//		RestTemplate restTemplate = new RestTemplate();
-//		String uri = restURI.getURL()+"/employeerest/balance";
-//		ArrayList<Integer> arraylist = restTemplate.getForObject(uri, ArrayList.class);
+	public ModelAndView balanceLeaves(HttpSession session) {
+		String empid=(String) session.getAttribute("empid");
+		ArrayList<BalanceLeaves> arraylist =employeecallingRest.balanceLeaves(empid);
 		ModelAndView model = new ModelAndView("BalanceLeaves");
 		model.addObject("balance", arraylist);
 		return model;

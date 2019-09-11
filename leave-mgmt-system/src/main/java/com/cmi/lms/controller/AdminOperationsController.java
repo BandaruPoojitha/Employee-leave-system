@@ -54,7 +54,7 @@ public class AdminOperationsController {
 	}
 
 	@RequestMapping(value = "adddepartment", method = RequestMethod.POST)
-	public String addDepartment(HttpSession session1, Department department) {
+	public String addDepartment(HttpSession session1, Department department,String managerId) {
 
 		String result = adminRest.addDepartment(department);
 		if (result.equals("added"))

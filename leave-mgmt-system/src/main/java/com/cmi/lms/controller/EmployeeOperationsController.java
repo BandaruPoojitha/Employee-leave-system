@@ -29,30 +29,25 @@ public class EmployeeOperationsController {
 	public String addLeave(HttpSession session, @RequestParam("LeaveType") String LeaveType,
 			@RequestParam("startdate") String startdate, @RequestParam("enddate") String enddate,
 			@RequestParam("reason") String reason) throws ParseException {
-		Bean bean = new Bean();
-		Employee employee = new Employee();
-		Employee employee1 = new Employee();
-		employee.setEmployeeId(bean.getEmployeeId());
+		Employee employee=new Employee();
+		Employee employee1=new Employee();
 		Date from = new SimpleDateFormat("yyyy-MM-dd").parse(startdate);
 		Date to = new SimpleDateFormat("yyyy-MM-dd").parse(enddate);
+		System.out.println(session.getAttribute("empid")+"{{{{{{{");
+		String employeeId= session.getAttribute("empid").toString();
+		employee1.setEmployeeId(employeeId);
 		ApplyLeave al = new ApplyLeave();
 		al.setStartdate(from);
 		al.setEnddate(to);
 		al.setReason(reason);
-		al.setEmployeeId(employee);
+		al.setEmployeeId(employee1);
 		al.setLeaveType(LeaveType);
-		String managerId=employeecallingRest.getManagerId();
-//		String uri = restURI.getURL()+"/employeerest/getmanagerId";
-//		RestTemplate rt = new RestTemplate();
-//		String managerId = rt.getForObject(uri, String.class);
-		employee1.setEmployeeId(managerId);
-		al.setApplyTo(employee1);
+		String managerId=employeecallingRest.getManagerId(employeeId);
+		employee.setEmployeeId(managerId);
+		al.setApplyTo(employee);
 		al.setStatus("processing");
 		al.setNoOfDays((int) DaysCount.daysBetween(from, to));
-		String result=employeecallingRest.applyLeave(al);
-//		String uri1 =restURI.getURL()+"/employeerest/addleave";
-//		RestTemplate resttemplate = new RestTemplate();
-//		String result = resttemplate.postForObject(uri1, al, String.class);
+		String result=employeecallingRest.applyLeave(al,employeeId);
 		if (result.equals("applied"))
 			session.setAttribute("status", "applied");
 		else
@@ -64,32 +59,27 @@ public class EmployeeOperationsController {
 	public String updateStatus(HttpSession session, HttpServletRequest request) {
 		try {
 		@SuppressWarnings("unchecked")
-		ArrayList<String> arraylist = (ArrayList<String>) session.getAttribute("updatelist");
+		ArrayList<ApplyLeave> arraylist = (ArrayList<ApplyLeave>) session.getAttribute("updatelist");
+		String employeeId= session.getAttribute("empid").toString();
 		
-		int j = 7;
 		for (int i = 0; i < arraylist.size(); i++) {
 			String i1 = new Integer(i).toString();
 			String value = request.getParameter("JK" + i1);
 		
-			int sno = Integer.parseInt(arraylist.get(j));
+			int sno = arraylist.get(i).getSno();
 
 			if (value.equals("forward")) {
-				String managerId=employeecallingRest.getManagerId();
-//				String uri1 = "http://localhost:8083/employeerest/getmanagerId";
-//				RestTemplate resttemplate = new RestTemplate();
-//				String managerId = resttemplate.getForObject(uri1, String.class);
+				String managerId=employeecallingRest.getManagerId(employeeId);
+
 				employeecallingRest.forwardLeave(sno,managerId);
-//				String uri = restURI.getURL()+"/employeerest/forward/" + sno + "/" + managerId;
-//				String result = resttemplate.getForObject(uri, String.class);
-				j = j + 8;
+
+				
 			} else if (value.equals("accept") || value.equals("reject")) {
 			employeecallingRest.updateStatus(sno,value);
-//				RestTemplate resttemplate = new RestTemplate();
-//				String uri =restURI.getURL()+"/employeerest/status/" + sno + "/" + value;
-//				String result = resttemplate.getForObject(uri, String.class);
-				j = j + 8;
+
+				
 			}
-			i = i + 7;
+			
 		}
 		}catch(Exception e) {
 			return "redirect:/grantleave.jsp";
@@ -101,24 +91,16 @@ public class EmployeeOperationsController {
 	public String cancleLeave(HttpSession session, HttpServletRequest request) {
 		try {
 		@SuppressWarnings("unchecked")
-		ArrayList<String> arraylist = (ArrayList<String>) session.getAttribute("cancellist");
-		int j = 7;
+		ArrayList<ApplyLeave> arraylist = (ArrayList<ApplyLeave>) session.getAttribute("cancellist");
 
 		for (int i = 0; i < arraylist.size(); i++) {
 			String i1 = new Integer(i).toString();
 			String value = request.getParameter("jk" + i1);
-			int sno = Integer.parseInt(arraylist.get(j));
+			int sno =arraylist.get(i).getSno();
 			if (value.equals("cancel")) {
 				employeecallingRest.cancel(sno);
-//				RestTemplate resttemplate = new RestTemplate();
-//				String uri = restURI.getURL()+"/employeerest/cancelleave/" + sno;
-//				String result = resttemplate.getForObject(uri, String.class);
-				j = j + 8;
-			} else {
-				j = j + 8;
-			}
-			i = i + 7;
 
+			} 
 		}
 		}catch(Exception e) {
 			return "redirect:/cancelleave.jsp";

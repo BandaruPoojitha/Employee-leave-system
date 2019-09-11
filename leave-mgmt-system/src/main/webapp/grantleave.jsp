@@ -3,10 +3,11 @@
 	import="com.cmi.lms.beans.*"
 	pageEncoding="ISO-8859-1"%>
 
-<%
-	if (request.getAttribute("list") != null) {
-		ArrayList<String> ld = (ArrayList<String>) request.getAttribute("list");
+<% System.out.println("hi"+session.getAttribute("list"));
+	if (session.getAttribute("list") != null) {
+		ArrayList<ApplyLeave> ld = (ArrayList<ApplyLeave>) session.getAttribute("list");
 		session.setAttribute("updatelist", ld);
+		
 %>
 
 <!DOCTYPE html>
@@ -60,41 +61,38 @@ legend {
 			<th>status</th>
 			<th></th>
 		</tr>
-		<form action="/employeeoperations/updatestatus" method="post">
+		<form action="/employeeoperations/updatestatus"  method="post">
 			<%!int i = 0;%>
 			<tr>
 				<%
+			
 					for (i = 0; i < ld.size(); i++) {
 
-							if (ld.get(6).equals("processing")) {
-								out.println("<td>" + ld.get(i + 7) + "</td><td>" + ld.get(i) + "</td><td>" + ld.get(i + 1)
-										+ "</td><td>" + ld.get(i + 2) + "</td><td>" + ld.get(i + 3) + "</td><td>"
-										+ ld.get(i + 4) + "</td><td>" + ld.get(i + 5) + "</td><td>" + ld.get(i + 6) + "</td>");
-								session.setAttribute("sno", ld.get(7));
+							if (ld.get(i).getStatus().equals("processing")) {
+								out.println("<tr><td>" + ld.get(i).getSno()+"</td><td>" + ld.get(i).getEmployeeId().getEmployeeId()+ "</td><td>" + ld.get(i).getLeaveType()
+										+ "</td><td>" + ld.get(i).getStartdate() + "</td><td>" + ld.get(i).getEnddate() + "</td><td>"
+										+ ld.get(i).getApplyTo().getEmployeeId()+ "</td><td>" + ld.get(i).getReason() + "</td><td>" + ld.get(i).getStatus() + "</td>");
 				%>
 				<td>Accept::<input id="<%out.print("A" + i);%>" name="JK<%=i%>"
 					type="radio" value="accept" /> Reject:: <input
 					id="<%out.print("B" + i);%>" name="JK<%=i%>" type="radio" value="reject" /> 
-					<%Bean bean = new Bean();
-						if (!bean.getEmployeeType().equals("CEO")) {%>
+					<%
+						if (!session.getAttribute("role").equals("CEO")) {%>
 					Forward::<input id="<%out.print("C" + i);%>"
-					name="JK<%=i%>" type="radio" value="forward" /> <%
+					name="JK<%=i%>" type="radio" value="forward" /> </tr><%
  	}
+							}
+					}
+	
  %>
 				</td>
 			</tr>
 
-			<%
-				i = i + 7;
-						}
-					}
-			%>
-		
-	</table>
+			
+	
 	<input id="button" value="SUBMIT" type="submit" />
 	</form>
-	<%
-		}
-	%>
+	</table>
+	<%} %>
 </body>
 </html>

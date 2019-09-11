@@ -3,7 +3,7 @@
 	import="leave.*" pageEncoding="ISO-8859-1"%>
 <%
 	if (request.getAttribute("cancel") != null) {
-		ArrayList<String> ld = (ArrayList<String>) request.getAttribute("cancel");
+		ArrayList<ApplyLeave> ld = (ArrayList<ApplyLeave>) request.getAttribute("cancel");
 		session.setAttribute("cancellist", ld);
 %>
 
@@ -63,11 +63,10 @@ legend {
 			<%
 				for (int i = 0; i < ld.size(); i++) {
 
-						System.out.println("   leave    " + ld.get(i + 6));
 
-						out.println("<tr><td>" + ld.get(i + 7) + "</td><td>" + ld.get(i) + "</td><td>" + ld.get(i + 1)
-								+ "</td><td>" + ld.get(i + 2) + "</td><td>" + ld.get(i + 3) + "</td><td>" + ld.get(i + 4)
-								+ "</td><td>" + ld.get(i + 5) + "</td><td>" + ld.get(i + 6) + "</td>");
+						out.println("<tr><td>" + ld.get(i).getSno()+ "</td><td>" + ld.get(i).getEmployeeId().getEmployeeId()+ "</td><td>" + ld.get(i).getLeaveType()
+								+ "</td><td>" + ld.get(i).getStartdate()+ "</td><td>" + ld.get(i).getEnddate() + "</td><td>" + ld.get(i).getApplyTo().getEmployeeId()
+								+ "</td><td>" + ld.get(i).getReason() + "</td><td>" + ld.get(i).getStatus() + "</td>");
 			%>
 		
 		<td>Cancel:: <input id="<%out.print("A" + i);%>" type="radio"
@@ -79,7 +78,7 @@ legend {
 
 		</td>
 		<%
-			i = i + 7;
+			
 				}
 		%>
 	</table>

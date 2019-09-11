@@ -4,7 +4,7 @@
 	pageEncoding="ISO-8859-1"%>
 
 <%
-	ArrayList<String> ld = (ArrayList<String>) request.getAttribute("track");
+	ArrayList<ApplyLeave> ld = (ArrayList<ApplyLeave>) request.getAttribute("track");
 %>
 
 <!DOCTYPE html>
@@ -51,14 +51,13 @@ legend {
 			<th>status</th>
 		</tr>
 		<%
-			//session.setAttribute("sizeal",al1.size());
-			//out.println(al1.size()+"size");
+			
 			for (int i = 0; i < ld.size(); i++) {
 
-				out.println("<tr><td>" + ld.get(i + 7) + "</td><td>" + ld.get(i) + "</td><td>" + ld.get(i + 1)
-						+ "</td><td>" + ld.get(i + 2) + "</td><td>" + ld.get(i + 3) + "</td><td>" + ld.get(i + 4)
-						+ "</td><td>" + ld.get(i + 5) + "</td><td>" + ld.get(i + 6) + "</td>");
-				i = i + 7;
+
+				out.println("<tr><td>" + ld.get(i).getSno()+ "</td><td>" + ld.get(i).getEmployeeId().getEmployeeId()+ "</td><td>" + ld.get(i).getLeaveType()
+						+ "</td><td>" + ld.get(i).getStartdate()+ "</td><td>" + ld.get(i).getEnddate() + "</td><td>" + ld.get(i).getApplyTo().getEmployeeId()
+						+ "</td><td>" + ld.get(i).getReason() + "</td><td>" + ld.get(i).getStatus() + "</td>");
 			}
 			session.removeAttribute("track");
 		%>

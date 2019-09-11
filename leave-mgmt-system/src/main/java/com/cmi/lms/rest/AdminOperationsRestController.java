@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cmi.lms.beans.Department;
 import com.cmi.lms.beans.Employee;
+import com.cmi.lms.beans.Login;
 import com.cmi.lms.service.AdminServiceRepo;
 
 @RestController
@@ -27,14 +28,19 @@ public class AdminOperationsRestController {
 
 		return result;
 	}
+	@RequestMapping(value = "/getempid", method = RequestMethod.GET)
+	@ResponseBody
+	public ArrayList<Login> getEmpId() {
+		
+		return admin.getEmployeeId();
 
+	}
 	@RequestMapping(value = "/adddepartment/{dptid}/{mgrid}", method = RequestMethod.GET)
 	@ResponseBody
 	public String addDepartment(@PathVariable("dptid") String departmentId, @PathVariable("mgrid") String managerId) {
 		Department department = new Department();
 		department.setDepartmentId(departmentId);
-		//Employee employee = new Employee();
-		//employee.setEmployeeId(managerId);
+	
 		department.setManagerId(managerId);
 		admin.addDepartment(department);
 		return "added";

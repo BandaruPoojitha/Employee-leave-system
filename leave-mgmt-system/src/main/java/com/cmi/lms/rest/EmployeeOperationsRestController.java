@@ -10,9 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cmi.lms.beans.ApplyLeave;
 import com.cmi.lms.beans.BalanceLeaves;
+import com.cmi.lms.beans.Employee;
 import com.cmi.lms.bussiness.CancelLeaveValiation;
-import com.cmi.lms.bussiness.validateLeave;
 import com.cmi.lms.service.EmployeeServiceRepo;
+import com.cmi.lms.service.validateLeave;
 
 @RestController
 @RequestMapping("/employeerest")
@@ -22,38 +23,26 @@ public class EmployeeOperationsRestController {
 	@Autowired
 	EmployeeServiceRepo employeedao;
 
-	@RequestMapping("/getmanagerId")
-	public String getManagerId() {
-		return employeedao.getManager();
+	@RequestMapping("/getmanagerId/{empid}")
+	public Employee getManagerId(@PathVariable("empid") String employeeId) {
+		return employeedao.getManager(employeeId);
 
 	}
 
-	@RequestMapping("/addleave")
-	public String addLeave(@RequestBody ApplyLeave applyleave) {
+	@RequestMapping("/addleave/{empid}")
+	public String addLeave(@RequestBody ApplyLeave applyleave,@PathVariable("empid") String empid) {
 
-		if (validateLeave.leaveValid(applyleave))
+		if (validateLeave.leaveValid(applyleave,empid))
 			return "applied";
 		else
 			return "notapplied";
 
 	}
 
-	@RequestMapping("/grant")
-	public ArrayList<String> grantLeave() {
-		ArrayList<ApplyLeave> al = employeedao.grantLeave();
-		ArrayList<String> arraylist = new ArrayList<>();
-		for (int i = 0; i < al.size(); i++) {
+	@RequestMapping("/grant/{empid}")
+	public ArrayList<ApplyLeave> grantLeave(@PathVariable("empid") String empid) {
 
-			arraylist.add(al.get(i).getEmployeeId().getEmployeeId());
-			arraylist.add(al.get(i).getLeaveType());
-			arraylist.add(al.get(i).getStartdate().toString());
-			arraylist.add(al.get(i).getEnddate().toString());
-			arraylist.add(al.get(i).getApplyTo().getEmployeeId());
-			arraylist.add(al.get(i).getReason());
-			arraylist.add(al.get(i).getStatus());
-			arraylist.add(String.valueOf(al.get(i).getSno()));
-		}
-		return arraylist;
+		return employeedao.grantLeave(empid);
 	}
 
 	@RequestMapping("/forward/{sno}/{managerId}")
@@ -67,49 +56,21 @@ public class EmployeeOperationsRestController {
 		return employeedao.updateStatus(status, sno);
 	}
 
-	@RequestMapping("/leavedetails")
-	public ArrayList<String> LeaveDetails() {
-		ArrayList<ApplyLeave> al = employeedao.trackLeave();
-		ArrayList<String> arraylist = new ArrayList<>();
-		for (int i = 0; i < al.size(); i++) {
-
-			arraylist.add(al.get(i).getEmployeeId().getEmployeeId());
-			arraylist.add(al.get(i).getLeaveType());
-			arraylist.add(al.get(i).getStartdate().toString());
-			arraylist.add(al.get(i).getEnddate().toString());
-			arraylist.add(al.get(i).getApplyTo().getEmployeeId());
-			arraylist.add(al.get(i).getReason());
-			arraylist.add(al.get(i).getStatus());
-			arraylist.add(String.valueOf(al.get(i).getSno()));
-		}
-		return arraylist;
+	@RequestMapping("/leavedetails/{empid}")
+	public ArrayList<ApplyLeave> LeaveDetails(@PathVariable("empid") String empid) {
+		return employeedao.trackLeave(empid);
+		
 	}
-	@RequestMapping("/cancel")
-	public ArrayList<String> cancelLeaveDetails() {
-		CancelLeaveValiation cancelleave = new CancelLeaveValiation();
-		ArrayList<ApplyLeave> al = employeedao.trackLeave();
-		ArrayList<String> arraylist = new ArrayList<>();
-		for (int i = 0; i < al.size(); i++) {
-			if (cancelleave.cancelLeave(al, i)) {
-			arraylist.add(al.get(i).getEmployeeId().getEmployeeId());
-			arraylist.add(al.get(i).getLeaveType());
-			arraylist.add(al.get(i).getStartdate().toString());
-			arraylist.add(al.get(i).getEnddate().toString());
-			arraylist.add(al.get(i).getApplyTo().getEmployeeId());
-			arraylist.add(al.get(i).getReason());
-			arraylist.add(al.get(i).getStatus());
-			arraylist.add(String.valueOf(al.get(i).getSno()));
-		}
-		}
-		return arraylist;
+	@RequestMapping("/cancel/{empid}")
+	public ArrayList<ApplyLeave> cancelLeaveDetails(@PathVariable("empid") String empid) {
+		return employeedao.trackLeave(empid);
+	
 	}
-	@RequestMapping("/balance")
-	public ArrayList<Integer> balanceLeaves() {
-		ArrayList<BalanceLeaves> arraylist = employeedao.getLeaveBalance();
-		ArrayList<Integer> arrayList2 = new ArrayList<>();
-		arrayList2.add(arraylist.get(0).getLOP());
-		arrayList2.add(arraylist.get(0).getPaid());
-		return arrayList2;
+	@RequestMapping("/balance/{empid}")
+	public ArrayList<BalanceLeaves> balanceLeaves(@PathVariable("empid") String empid) {
+		return employeedao.getLeaveBalance(empid);
+	
+		
 	}
 
 	@RequestMapping("/cancelleave/{sno}")
