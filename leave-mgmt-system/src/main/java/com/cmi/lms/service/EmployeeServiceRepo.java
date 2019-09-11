@@ -25,26 +25,24 @@ public class EmployeeServiceRepo {
 	@Autowired
 	BalanceRepo balancerepo;
 
-	public String getManager() {
+	public Employee getManager(String employeeId) {
 		Bean bean = new Bean();
-		Optional<Employee> employee = employeerepo.findById(bean.getEmployeeId());
+		Optional<Employee> employee = employeerepo.findById(employeeId);
 
-		return employee.get().getManagerId();
+		return employee.get();
 	}
 
 	public String applyLeave(ApplyLeave applyleave) {
 
 		leaverepo.save(applyleave);
-		return "aapled";
+		return "applied";
 	}
 
-	public ArrayList<ApplyLeave> grantLeave() {
+	public ArrayList<ApplyLeave> grantLeave(String employeeId) {
 
-		Bean bean = new Bean();
-		Employee emp = new Employee();
-		emp.setEmployeeId(bean.getEmployeeId());
+	
 
-		ArrayList<ApplyLeave> al = leaverepo.findLeaves(emp, "processing");
+		ArrayList<ApplyLeave> al = leaverepo.findLeaves(employeeId, "processing");
 
 		return al;
 	}
@@ -83,24 +81,17 @@ public class EmployeeServiceRepo {
 		return "updated";
 	}
 
-	public ArrayList<ApplyLeave> trackLeave() {
-		// TODO Auto-generated method stub
-		Bean bean = new Bean();
-		Employee employee = new Employee();
-		employee.setEmployeeId(bean.getEmployeeId());
+	public ArrayList<ApplyLeave> trackLeave(String employeeId) {
+		
 
-		ArrayList<ApplyLeave> al = leaverepo.trackLeaveDetails(employee);
+		ArrayList<ApplyLeave> al = leaverepo.trackLeaveDetails(employeeId);
 
 		return al;
 	}
 
-	public ArrayList<BalanceLeaves> getLeaveBalance() {
-		// TODO Auto-generated method stub
+	public ArrayList<BalanceLeaves> getLeaveBalance(String empid) {
 
-		Bean bean = new Bean();
-		Employee employee = new Employee();
-		employee.setEmployeeId(bean.getEmployeeId());
-		ArrayList<BalanceLeaves> arraylist = balancerepo.getBalanceLeaves(bean.getEmployeeId());
+		ArrayList<BalanceLeaves> arraylist = balancerepo.getBalanceLeaves(empid);
 
 		return arraylist;
 	}
@@ -131,14 +122,11 @@ public class EmployeeServiceRepo {
 		return "canceled";
 	}
 
-	public ArrayList<ApplyLeave> validLeaves(Date startdate) {
+	public ArrayList<ApplyLeave> validLeaves(Date startdate,String empid) {
 	
-		Bean bean = new Bean();
-		Employee employee = new Employee();
-		employee.setEmployeeId(bean.getEmployeeId());
 
 		try {
-			ArrayList<ApplyLeave> al = leaverepo.validLeaves(startdate, bean.getEmployeeId());
+			ArrayList<ApplyLeave> al = leaverepo.validLeaves(startdate,empid);
 			return al;
 		} catch (Exception e) {
 
@@ -147,29 +135,24 @@ public class EmployeeServiceRepo {
 
 	}
 
-	public int validLOP(Date startdate, Date enddate) {
+	public int validLOP(Date startdate, Date enddate,String employeeId) {
 
-		Bean bean = new Bean();
-		Employee employee = new Employee();
-		employee.setEmployeeId(bean.getEmployeeId());
+	
 		int count = 0;
 		int endmonth = enddate.getMonth() + 1;
 		int strtmonth = startdate.getMonth() + 1;
-		ArrayList<ApplyLeave> al = leaverepo.validLOP(strtmonth, endmonth, employee, "LOP","reject");
+		ArrayList<ApplyLeave> al = leaverepo.validLOP(strtmonth, endmonth, employeeId, "LOP","reject");
 		for (int i = 0; i < al.size(); i++) {
 			count = count + al.get(i).getNoOfDays();
 		}
 		return count;
 	}
 
-	public ArrayList<ApplyLeave> validLeavesEnd(Date enddate) {
+	public ArrayList<ApplyLeave> validLeavesEnd(Date enddate,String empid) {
 	
-		Bean bean = new Bean();
-		Employee employee = new Employee();
-		employee.setEmployeeId(bean.getEmployeeId());
 
 		try {
-			ArrayList<ApplyLeave> al = leaverepo.validLeavesEnd(enddate, bean.getEmployeeId());
+			ArrayList<ApplyLeave> al = leaverepo.validLeavesEnd(enddate,empid);
 			return al;
 		} catch (Exception e) {
 
@@ -178,14 +161,11 @@ public class EmployeeServiceRepo {
 		
 	}
 
-	public ArrayList<ApplyLeave>  getSameDatesLeave(Date startdate, Date enddate) {
+	public ArrayList<ApplyLeave>  getSameDatesLeave(Date startdate, Date enddate,String employeeId) {
 
-		Bean bean = new Bean();
-		Employee employee = new Employee();
-		employee.setEmployeeId(bean.getEmployeeId());
 
 		try {
-			ArrayList<ApplyLeave> al = leaverepo.sameDates(startdate,enddate, bean.getEmployeeId());
+			ArrayList<ApplyLeave> al = leaverepo.sameDates(startdate,enddate, employeeId);
 			return al;
 		} catch (Exception e) {
 

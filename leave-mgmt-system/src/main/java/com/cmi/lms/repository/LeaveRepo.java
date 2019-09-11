@@ -15,8 +15,8 @@ import com.cmi.lms.beans.Employee;
 
 @Repository
 public interface LeaveRepo extends CrudRepository<ApplyLeave, Integer> {
-	@Query("select a from ApplyLeave a where a.applyTo=:employeeId and a.status=:status")
-	ArrayList<ApplyLeave> findLeaves(Employee employeeId, String status);
+	@Query("select a from ApplyLeave a where a.applyTo.employeeId=:employeeId and a.status=:status")
+	ArrayList<ApplyLeave> findLeaves(String employeeId, String status);
 
 	@Transactional
 	@Modifying
@@ -28,8 +28,8 @@ public interface LeaveRepo extends CrudRepository<ApplyLeave, Integer> {
 	@Query("update ApplyLeave a set a.status=:status where a.sno=:sno")
 	void updateStatus(String status, int sno);
 
-	@Query("select a from ApplyLeave a where a.employeeId=:employeeId")
-	ArrayList<ApplyLeave> trackLeaveDetails(Employee employeeId);
+	@Query("select a from ApplyLeave a where a.employeeId.employeeId=:employeeId")
+	ArrayList<ApplyLeave> trackLeaveDetails(String employeeId);
 
 	@Transactional
 	@Modifying
@@ -39,8 +39,8 @@ public interface LeaveRepo extends CrudRepository<ApplyLeave, Integer> {
 	@Query("SELECT e FROM ApplyLeave e WHERE e.employeeId.employeeId=:employee and e.enddate=:enddate ")
 	ArrayList<ApplyLeave> validLeaves(@Param("enddate") Date enddate, @Param("employee") String employee);
 
-	@Query("select e from ApplyLeave e where (MONTH(e.enddate)=:enddate) and (MONTH(e.startdate)=:startdate) and (e.LeaveType=:type) and (e.employeeId=:employee) and e.status<>:status")
-	ArrayList<ApplyLeave> validLOP(int startdate, int enddate, Employee employee, String type,String status);
+	@Query("select e from ApplyLeave e where (MONTH(e.enddate)=:enddate) and (MONTH(e.startdate)=:startdate) and (e.LeaveType=:type) and (e.employeeId.employeeId=:employee) and e.status<>:status")
+	ArrayList<ApplyLeave> validLOP(int startdate, int enddate, String employee, String type,String status);
 	
 	@Query("SELECT e FROM ApplyLeave e WHERE e.employeeId.employeeId=:employee and e.startdate=:startdate ")
 	ArrayList<ApplyLeave> validLeavesEnd(@Param("startdate")Date startdate, @Param("employee") String employeeId);

@@ -3,7 +3,7 @@
 	pageEncoding="ISO-8859-1"%>
 
 <%
-	ArrayList<Integer> al = (ArrayList<Integer>) request.getAttribute("balance");
+	ArrayList<BalanceLeaves> al = (ArrayList<BalanceLeaves>) request.getAttribute("balance");
 %>
 
 <!DOCTYPE html>
@@ -54,12 +54,12 @@ legend {
 		<tr>
 			<td><div>
 					<%
-						out.print(al.get(1));
+						out.print(al.get(0).getPaid());
 					%>
 				</div></td>
 			<td><div>
 					<%
-						out.print(al.get(0));
+						out.print(al.get(0).getLOP());
 					%>
 				</div></td>
 		</tr>

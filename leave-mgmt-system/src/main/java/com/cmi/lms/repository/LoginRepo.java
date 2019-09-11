@@ -1,5 +1,7 @@
 package com.cmi.lms.repository;
 
+import java.util.ArrayList;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.Modifying;
@@ -15,7 +17,9 @@ public interface LoginRepo extends CrudRepository<Login, String> {
 
 	@Transactional
 	@Modifying
-	@Query("update Login l set l.employeeType=:type where l.employeeId=:managerId")
+	@Query("update Login l set l.employeeType=:type where l.employeeId.employeeId=:managerId")
 	void updaterole(String managerId, String type);
+@Query("select l from Login l ")
+	ArrayList<Login> getEmployeeid();
 
 }

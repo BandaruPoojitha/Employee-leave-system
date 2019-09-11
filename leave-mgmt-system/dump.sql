@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.27, for Linux (x86_64)
 --
--- Host: localhost    Database: LeaveSystem
+-- Host: localhost    Database: LeaveManagementsystem
 -- ------------------------------------------------------
 -- Server version	5.7.27-0ubuntu0.18.04.1
 
@@ -46,7 +46,7 @@ CREATE TABLE `ApplyLeave` (
 
 LOCK TABLES `ApplyLeave` WRITE;
 /*!40000 ALTER TABLE `ApplyLeave` DISABLE KEYS */;
-INSERT INTO `ApplyLeave` VALUES (12,'Paid','2019-08-15',1,'sick','2019-08-14','accept','100','101'),(13,'LOP','2019-08-15',1,'s','2019-08-14','accept','100','101'),(23,'Paid','2019-08-12',1,'sick','2019-08-11','processing','100','101');
+INSERT INTO `ApplyLeave` VALUES (3,'LOP','2019-09-21',1,'sick','2019-09-20','processing','1','101'),(4,'LOP','2019-09-27',2,'sick','2019-09-25','processing','1','101'),(5,'Paid','2019-09-21',2,'sick','2019-09-19','processing','1','100');
 /*!40000 ALTER TABLE `ApplyLeave` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -74,7 +74,7 @@ CREATE TABLE `BalanceLeaves` (
 
 LOCK TABLES `BalanceLeaves` WRITE;
 /*!40000 ALTER TABLE `BalanceLeaves` DISABLE KEYS */;
-INSERT INTO `BalanceLeaves` VALUES (1,1,10,'100'),(2,1,9,'101'),(11,1,10,'104');
+INSERT INTO `BalanceLeaves` VALUES (1,0,10,'101'),(2,0,10,'100');
 /*!40000 ALTER TABLE `BalanceLeaves` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -87,10 +87,8 @@ DROP TABLE IF EXISTS `Department`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Department` (
   `departmentId` varchar(255) NOT NULL,
-  `managerId_employeeId` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`departmentId`),
-  KEY `FKgypx2biag928mmure8mh5f5mk` (`managerId_employeeId`),
-  CONSTRAINT `FKgypx2biag928mmure8mh5f5mk` FOREIGN KEY (`managerId_employeeId`) REFERENCES `Employee` (`employeeId`)
+  `managerId` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`departmentId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -100,7 +98,7 @@ CREATE TABLE `Department` (
 
 LOCK TABLES `Department` WRITE;
 /*!40000 ALTER TABLE `Department` DISABLE KEYS */;
-INSERT INTO `Department` VALUES ('1','1'),('2','100');
+INSERT INTO `Department` VALUES ('1','1'),('2','101');
 /*!40000 ALTER TABLE `Department` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -131,7 +129,7 @@ CREATE TABLE `Employee` (
 
 LOCK TABLES `Employee` WRITE;
 /*!40000 ALTER TABLE `Employee` DISABLE KEYS */;
-INSERT INTO `Employee` VALUES ('1','netherlands','steven@gmail.com','steven','1','9878677564','1'),('100','JNTU','poojitha@gmail.com','poojitha','1','9492156282','1'),('101','suraram','sreedevi@gmail.com','sreedevi','100','9494199738','2'),('104','andaman','simadrig75@gmail.com','simadri','100','9474294060','2');
+INSERT INTO `Employee` VALUES ('1','netherlands','steven@gmail.com','steven','1','8989898989','1'),('100','nacharam','harsha@gmail.com','harsha','1','9505999321','1'),('101','suraram','poojitha55@gmail.com','poojitha','1','4931562782','1');
 /*!40000 ALTER TABLE `Employee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -159,7 +157,7 @@ CREATE TABLE `Login` (
 
 LOCK TABLES `Login` WRITE;
 /*!40000 ALTER TABLE `Login` DISABLE KEYS */;
-INSERT INTO `Login` VALUES ('admin','admin','admin',NULL),('poojitha100','manager','100poojitha','100'),('simadri104','employee','104simadri','104'),('sreedevi101','employee','101sreedevi','101'),('steven1','CEO','1steven','1');
+INSERT INTO `Login` VALUES ('admin','admin','admin','100'),('poojitha101','manager','101poojitha','101'),('steven1','CEO','1steven','1');
 /*!40000 ALTER TABLE `Login` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -181,7 +179,7 @@ CREATE TABLE `hibernate_sequence` (
 
 LOCK TABLES `hibernate_sequence` WRITE;
 /*!40000 ALTER TABLE `hibernate_sequence` DISABLE KEYS */;
-INSERT INTO `hibernate_sequence` VALUES (24),(24);
+INSERT INTO `hibernate_sequence` VALUES (6),(6);
 /*!40000 ALTER TABLE `hibernate_sequence` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -194,4 +192,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-08-30 19:26:41
+-- Dump completed on 2019-09-11 19:19:32

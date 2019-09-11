@@ -72,4 +72,10 @@ public class AdminServiceRepo{
 		employeerepo.editContact(contact, employeeId);
 	}
 
+	public ArrayList<Login> getEmployeeId() {
+		
+	return loginrepo.getEmployeeid();
+		
+	}
+
 }
