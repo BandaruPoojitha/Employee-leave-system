@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.cmi.lms.beans.ApplyLeave;
 import com.cmi.lms.beans.BalanceLeaves;
-import com.cmi.lms.bussiness.DaysCount;
+import com.cmi.lms.util.ApplicationUtil;
 
 @Component
 public class validateLeave {
@@ -58,8 +58,9 @@ public class validateLeave {
 
 	public boolean leaveValid(ApplyLeave applyleave,String employeeId) {
 
-		DaysCount d = new DaysCount();
-		int noofdays = (int) d.daysBetween(applyleave.getStartdate(), applyleave.getEnddate());
+	ApplicationUtil au=new ApplicationUtil();
+		int noofdays = (int) au.daysBetween(applyleave.getStartdate(), applyleave.getEnddate());
+		@SuppressWarnings("deprecation")
 		int year = applyleave.getStartdate().getYear() + 1900;
 		if ((year == LocalDate.now().getYear())) {
 			if(sameDates(applyleave.getStartdate(),applyleave.getEnddate(),employeeId)){

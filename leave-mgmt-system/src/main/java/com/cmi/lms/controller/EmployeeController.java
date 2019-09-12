@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.cmi.lms.beans.ApplyLeave;
 import com.cmi.lms.beans.BalanceLeaves;
 import com.cmi.lms.service.EmployeeCallingRest;
+import com.cmi.lms.util.ApplicationUtil;
 
 @Controller
 @RequestMapping("/employee")
@@ -29,7 +29,6 @@ public class EmployeeController {
 	public String grantEmployee(HttpSession session) {
 		String empid=(String) session.getAttribute("empid");
 	ArrayList<ApplyLeave> arraylist=employeecallingRest.grantLeave(empid);
-
 		session.setAttribute("list", arraylist);
 		return "redirect:/grantleave.jsp";
 
@@ -37,10 +36,11 @@ public class EmployeeController {
 
 	@RequestMapping(value = "cancelleave", method = RequestMethod.GET)
 	public ModelAndView cancel(HttpSession session) {
+		ApplicationUtil au=new ApplicationUtil();
 		String empid=(String) session.getAttribute("empid");
-		ArrayList<ApplyLeave> arraylist =employeecallingRest.cancelLeave(empid);
+		ArrayList<ApplyLeave> arraylist2=au.cancelLeave(employeecallingRest.cancelLeave(empid));
 		ModelAndView model = new ModelAndView("cancelleave");
-		model.addObject("cancel", arraylist);
+		model.addObject("cancel", arraylist2);
 		return model;
 	}
 
@@ -50,7 +50,7 @@ public class EmployeeController {
 		
 		ArrayList<ApplyLeave> arraylist =employeecallingRest.trackLeave(empid);
 
-		ModelAndView model = new ModelAndView("TrackLeave");
+		ModelAndView model = new ModelAndView("trackLeave");
 		model.addObject("track", arraylist);
 		return model;
 	}
@@ -59,7 +59,7 @@ public class EmployeeController {
 	public ModelAndView balanceLeaves(HttpSession session) {
 		String empid=(String) session.getAttribute("empid");
 		ArrayList<BalanceLeaves> arraylist =employeecallingRest.balanceLeaves(empid);
-		ModelAndView model = new ModelAndView("BalanceLeaves");
+		ModelAndView model = new ModelAndView("balanceleaves");
 		model.addObject("balance", arraylist);
 		return model;
 	}

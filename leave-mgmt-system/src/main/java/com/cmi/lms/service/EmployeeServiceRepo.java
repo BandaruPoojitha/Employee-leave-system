@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.cmi.lms.beans.ApplyLeave;
 import com.cmi.lms.beans.BalanceLeaves;
-import com.cmi.lms.beans.Bean;
 import com.cmi.lms.beans.Employee;
+import com.cmi.lms.exception.LMSUnAuthorisedException;
 import com.cmi.lms.repository.BalanceRepo;
 import com.cmi.lms.repository.EmpoyleeRepo;
 import com.cmi.lms.repository.LeaveRepo;
@@ -26,9 +26,12 @@ public class EmployeeServiceRepo {
 	BalanceRepo balancerepo;
 
 	public Employee getManager(String employeeId) {
-		Bean bean = new Bean();
-		Optional<Employee> employee = employeerepo.findById(employeeId);
 
+		Optional<Employee> employee = employeerepo.findById(employeeId);
+		if(employee==null) {
+			throw new LMSUnAuthorisedException("Invalid Credentials");
+
+		}
 		return employee.get();
 	}
 
@@ -39,26 +42,18 @@ public class EmployeeServiceRepo {
 	}
 
 	public ArrayList<ApplyLeave> grantLeave(String employeeId) {
-
-	
-
 		ArrayList<ApplyLeave> al = leaverepo.findLeaves(employeeId, "processing");
-
 		return al;
 	}
 
 	public String updateforward(int sno, String managerId) {
-		// TODO Auto-generated method stub
-		Employee employee = new Employee();
-		employee.setEmployeeId(managerId);
-
-		leaverepo.updateManager(sno, employee);
+		
+		leaverepo.updateManager(sno, managerId);
 		return "updated";
 
 	}
 
 	public String updateStatus(String status, int sno) {
-		// TODO Auto-generated method stub
 		leaverepo.updateStatus(status, sno);
 		if (status.equals("accept")) {
 			Optional<ApplyLeave> applyleave = leaverepo.findById(sno);
@@ -96,9 +91,12 @@ public class EmployeeServiceRepo {
 		return arraylist;
 	}
 
-	public String cancelLeave(int sno) {
-		
+	public String cancelLeave(int sno) throws Exception{
+	
 		Optional<ApplyLeave> applyleave = leaverepo.findById(sno);
+		if(applyleave.isEmpty()) {
+			throw new LMSUnAuthorisedException("Invalid");
+		}
 		if (applyleave.get().getStatus().equals("accept")) {
 			ArrayList<BalanceLeaves> al = balancerepo
 					.getBalanceLeaves(applyleave.get().getEmployeeId().getEmployeeId());

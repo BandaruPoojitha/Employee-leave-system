@@ -3,7 +3,11 @@ package com.cmi.lms.rest;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.cmi.lms.beans.ApplyLeave;
 import com.cmi.lms.beans.BalanceLeaves;
 import com.cmi.lms.beans.Employee;
-import com.cmi.lms.bussiness.CancelLeaveValiation;
 import com.cmi.lms.service.EmployeeServiceRepo;
 import com.cmi.lms.service.validateLeave;
 
@@ -23,58 +26,56 @@ public class EmployeeOperationsRestController {
 	@Autowired
 	EmployeeServiceRepo employeedao;
 
-	@RequestMapping("/getmanagerId/{empid}")
-	public Employee getManagerId(@PathVariable("empid") String employeeId) {
+	@GetMapping("/getmanagerId/{empid}")
+	public Employee getManagerId(@PathVariable("empid") String employeeId) throws Exception {
 		return employeedao.getManager(employeeId);
 
 	}
 
-	@RequestMapping("/addleave/{empid}")
-	public String addLeave(@RequestBody ApplyLeave applyleave,@PathVariable("empid") String empid) {
-
-		if (validateLeave.leaveValid(applyleave,empid))
+	@PostMapping("/addleave")
+	public String addLeave(@RequestBody ApplyLeave applyleave) {
+		if (validateLeave.leaveValid(applyleave,applyleave.getEmployeeId().getEmployeeId()))
 			return "applied";
 		else
 			return "notapplied";
 
 	}
 
-	@RequestMapping("/grant/{empid}")
+	@GetMapping("/grant/{empid}")
 	public ArrayList<ApplyLeave> grantLeave(@PathVariable("empid") String empid) {
 
 		return employeedao.grantLeave(empid);
 	}
 
-	@RequestMapping("/forward/{sno}/{managerId}")
-	public String forward(@PathVariable("sno") int sno, @PathVariable("managerId") String managerId) {
-
-		return employeedao.updateforward(sno, managerId);
+	@PutMapping("/forward")
+	public String forward(@RequestBody ApplyLeave al) {
+		return employeedao.updateforward(al.getSno(), al.getApplyTo().getManagerId());
 	}
 
-	@RequestMapping("/status/{sno}/{value}")
-	public String status(@PathVariable("sno") int sno, @PathVariable("value") String status) {
-		return employeedao.updateStatus(status, sno);
+	@PutMapping("/status")
+	public String status(@RequestBody ApplyLeave al) {
+		return employeedao.updateStatus(al.getStatus(), al.getSno());
 	}
 
-	@RequestMapping("/leavedetails/{empid}")
+	@GetMapping("/leavedetails/{empid}")
 	public ArrayList<ApplyLeave> LeaveDetails(@PathVariable("empid") String empid) {
 		return employeedao.trackLeave(empid);
 		
 	}
-	@RequestMapping("/cancel/{empid}")
+	@GetMapping("/cancel/{empid}")
 	public ArrayList<ApplyLeave> cancelLeaveDetails(@PathVariable("empid") String empid) {
 		return employeedao.trackLeave(empid);
 	
 	}
-	@RequestMapping("/balance/{empid}")
+	@GetMapping("/balance/{empid}")
 	public ArrayList<BalanceLeaves> balanceLeaves(@PathVariable("empid") String empid) {
 		return employeedao.getLeaveBalance(empid);
 	
 		
 	}
 
-	@RequestMapping("/cancelleave/{sno}")
-	public String cancelLeave(@PathVariable("sno") int sno) {
+	@DeleteMapping("/cancelleave/{sno}")
+	public String cancelLeave(@PathVariable("sno") int sno) throws Exception {
 
 		return employeedao.cancelLeave(sno);
 	}

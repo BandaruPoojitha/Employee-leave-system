@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	import="java.util.*" import="com.cmi.lms.beans.*" pageEncoding="UTF-8"%>
 <%
-	ArrayList<String> al1 = (ArrayList<String>) request.getAttribute("viewdepartment");
+	ArrayList<Department> al1 = (ArrayList<Department>) request.getAttribute("viewdepartment");
 %>
 <!DOCTYPE html>
 <html>
@@ -42,7 +42,7 @@ legend {
 }
 </style>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+
 </head>
 <body>
 <h2>Department Details!!</h2>
@@ -58,17 +58,17 @@ legend {
 		<tr>
 			<td><div>
 				<%
-					out.print(al1.get(i));
+					out.print(al1.get(i).getDepartmentId());
 				%></div>
 			</td>
 			<td><div>
 				<%
-					out.print(al1.get(i + 1));
+					out.print(al1.get(i).getManagerId());
 				%></div>
 			</td>
 		</tr>
 		<%
-			i++;
+			
 			}
 			request.removeAttribute("viewdepartment");
 		%>

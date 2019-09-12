@@ -71,5 +71,7 @@ body {
 			</table>
 		</fieldset>
 	</center>
+	<%session.removeAttribute("password") ;
+	session.removeAttribute("username") ;%>
 </body>
 </html>

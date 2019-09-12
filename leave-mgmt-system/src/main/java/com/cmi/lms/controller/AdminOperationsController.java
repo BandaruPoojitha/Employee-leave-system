@@ -14,8 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.cmi.lms.beans.Department;
 import com.cmi.lms.beans.Employee;
-import com.cmi.lms.bussiness.ValidateEmployee;
 import com.cmi.lms.service.AdminCallingRest;
+import com.cmi.lms.util.ApplicationUtil;
 
 @Controller
 @RequestMapping("adminoperations")
@@ -27,7 +27,7 @@ public class AdminOperationsController {
 	@RequestMapping(value = "addemployee", method = RequestMethod.POST)
 	public String addEmployee(HttpSession session2, Employee employee,
 			@RequestParam(name = "department") String department) {
-		ValidateEmployee validateEmployee = new ValidateEmployee();
+		ApplicationUtil validateEmployee = new ApplicationUtil();
 		Department department2 = new Department();
 
 		department2.setDepartmentId(department);
@@ -64,17 +64,21 @@ public class AdminOperationsController {
 
 	@RequestMapping(value = "viewDepartment", method = RequestMethod.GET)
 	public ModelAndView viewDepartment() {
-
-		ArrayList<String> result = adminRest.viewDepartment();
+		try {
+		ArrayList<Department> result = adminRest.viewDepartment();
 		ModelAndView model = new ModelAndView("viewdepartment");
 		model.addObject("viewdepartment", result);
 		return model;
+		}catch(Exception e) {
+			return new ModelAndView("admin");
+		}
 	}
 
 	@RequestMapping(value = "edit", method = RequestMethod.POST)
-	public String editDetails(Employee employee) {
-
-		ValidateEmployee ve = new ValidateEmployee();
+	public String editDetails(Employee employee,HttpSession session1) {
+          employee.setEmployeeId(session1.getAttribute("empid").toString());
+      
+		ApplicationUtil ve = new ApplicationUtil();
 		if (!employee.getEmployeeId().isEmpty()) {
 			if (!employee.getAddress().isEmpty()) {
 				adminRest.editAddress(employee);

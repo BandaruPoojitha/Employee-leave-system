@@ -3,10 +3,11 @@ package com.cmi.lms.rest;
 import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,52 +22,46 @@ public class AdminOperationsRestController {
 	@Autowired
 	AdminServiceRepo admin;
 
-	@RequestMapping(value = "/createemployee", method = RequestMethod.POST)
-	@ResponseBody
+	@PostMapping(value = "/createemployee")
 	public String employeeCreate(@RequestBody Employee employee) {
 		String result = admin.addEmployee(employee);
-
 		return result;
 	}
-	@RequestMapping(value = "/getempid", method = RequestMethod.GET)
+	@GetMapping(value = "/getempid")
 	@ResponseBody
 	public ArrayList<Login> getEmpId() {
 		
 		return admin.getEmployeeId();
 
 	}
-	@RequestMapping(value = "/adddepartment/{dptid}/{mgrid}", method = RequestMethod.GET)
-	@ResponseBody
-	public String addDepartment(@PathVariable("dptid") String departmentId, @PathVariable("mgrid") String managerId) {
-		Department department = new Department();
-		department.setDepartmentId(departmentId);
-	
-		department.setManagerId(managerId);
+	@PostMapping(value = "/adddepartment")
+	public String addDepartment(@RequestBody Department department) {
+		System.out.println("dpt  "+department.getManagerId());
 		admin.addDepartment(department);
 		return "added";
 	}
 
-	@RequestMapping("/viewdepartment")
-	public ArrayList<String> viewDepartment() {
-		ArrayList<String> al = admin.viewDepartment();
-		return al;
+	@GetMapping("/viewdepartment")
+	public ArrayList<Department> viewDepartment() throws Exception{
+	return  admin.viewDepartment();
+	
 	}
 
-	@RequestMapping("/editaddress/{address}/{empid}")
-	public String editAddress(@PathVariable("address") String address, @PathVariable("empid") String employeeId) {
-		admin.editAddress(address, employeeId);
+	@PutMapping("/editaddress")
+	public String editAddress(@RequestBody Employee employee) {
+		admin.editAddress(employee.getAddress(), employee.getEmployeeId());
 		return "editdaddress";
 	}
 
-	@RequestMapping("/editemail/{email}/{empid}")
-	public String editEmail(@PathVariable("email") String email, @PathVariable("empid") String employeeId) {
-		admin.editEmail(email, employeeId);
+	@PutMapping("/editemail")
+	public String editEmail(@RequestBody Employee employee) {
+		admin.editEmail(employee.getEmail(), employee.getEmployeeId());
 		return "editedemail";
 	}
 
-	@RequestMapping("/editcontact/{contact}/{empid}")
-	public String editContact(@PathVariable("contact") String contact, @PathVariable("empid") String employeeId) {
-		admin.editContact(contact, employeeId);
+	@PutMapping("/editcontact")
+	public String editContact(@RequestBody Employee employee) {
+		admin.editContact(employee.getPhonenumber(), employee.getEmployeeId());
 		return "editdcontact";
 	}
 }

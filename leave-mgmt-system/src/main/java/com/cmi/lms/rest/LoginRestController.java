@@ -19,7 +19,7 @@ public class LoginRestController {
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	@ResponseBody
-	public Login login(@RequestBody Login loginReq) {
+	public Login login(@RequestBody Login loginReq) throws Exception {
 		
 		return loginservice.getDetails(loginReq);
 

@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import com.cmi.lms.beans.Employee;
 import com.cmi.lms.beans.Login;
 
 public interface LoginRepo extends CrudRepository<Login, String> {
@@ -21,5 +20,7 @@ public interface LoginRepo extends CrudRepository<Login, String> {
 	void updaterole(String managerId, String type);
 @Query("select l from Login l ")
 	ArrayList<Login> getEmployeeid();
+@Query("select l from Login l where l.username=:username and l.password=:password")
+Login login(String username, String password);
 
 }

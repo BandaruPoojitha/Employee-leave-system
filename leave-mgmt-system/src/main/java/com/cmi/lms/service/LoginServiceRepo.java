@@ -1,11 +1,10 @@
 package com.cmi.lms.service;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cmi.lms.beans.Login;
+import com.cmi.lms.exception.LMSUnAuthorisedException;
 import com.cmi.lms.repository.LoginRepo;
 
 @Service
@@ -15,11 +14,12 @@ public class LoginServiceRepo {
 
 	public Login getDetails(Login l) {
 
-		String username = l.getUsername();
+		Login newl = loginrepo.login(l.getUsername(), l.getPassword());
 
-		Optional<Login> newl = loginrepo.findById(username);
-       
-		return newl.get();
+		if (newl == null) {
+			throw new LMSUnAuthorisedException("Invalid Credentials");
+		}
+		return newl;
 
 	}
 }

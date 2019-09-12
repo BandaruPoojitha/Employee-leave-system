@@ -37,12 +37,14 @@ public class LoginController {
 	
 		if (!login.getUsername().isEmpty()) {
 			if (!login.getPassword().isEmpty()) {
+				try {
 				Login result =logincallRest.getLoginDetails(login);
+				
 				if (result.getEmployeeType().equals("admin")) {
 					modelAndView = new ModelAndView("/admin");
 					   session.setAttribute("role", result.getEmployeeType());
 						session.setAttribute("empid", result.getEmployeeId().getEmployeeId());
-				} else if (result.getEmployeeType().equals("employee") || result.getEmployeeType().equals("manager") || result.getEmployeeType().equals("CEO")) {
+				} else if ((result.getEmployeeType().equals("employee") || result.getEmployeeType().equals("manager") || result.getEmployeeType().equals("CEO"))) {
 	               session.setAttribute("role", result.getEmployeeType());
 					session.setAttribute("empid", result.getEmployeeId().getEmployeeId());
 					modelAndView = new ModelAndView("/employee");
@@ -50,7 +52,11 @@ public class LoginController {
 					modelAndView = new ModelAndView("/Login");
 				}
 				return modelAndView;
-			} else {
+			}catch(Exception e) {
+				modelAndView = new ModelAndView("Login");
+			} 
+			}
+				else {
 				session.setAttribute("password", "nullpassword");
 				modelAndView = new ModelAndView("Login");
 			}
@@ -58,8 +64,13 @@ public class LoginController {
 			session.setAttribute("username", "nullusername");
 			modelAndView = new ModelAndView("Login");
 		}
+		
+	
+	
+
 		return modelAndView;
 	}
+
 	@RequestMapping(value = "/choice", method = RequestMethod.POST)
 	  public ModelAndView getChoice(@RequestParam("admin") String admin,HttpSession session) throws ServletException, IOException {
 		ModelAndView modelAndView=new ModelAndView("Login");

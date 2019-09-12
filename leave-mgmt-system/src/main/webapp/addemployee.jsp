@@ -84,25 +84,20 @@ legend {
 					<td>ManagerId::</td>
 					<td><select name="managerId">
 					
-
-							<%
-							if(true){
-								Employee emp=new Employee();
-								emp.setEmployeeId("100");
-								Login log=new Login();
-								log.setEmployeeId(emp);
-								
-					ArrayList<Login> list= new ArrayList<>();//(ArrayList<Login>)request.getAttribute("empid");
-					list.add(log);
+			<%
+							if(session.getAttribute("empids")!=null){			
+					ArrayList<Login> list= (ArrayList<Login>)session.getAttribute("empids");
 					Iterator<Login> iterate=list.iterator();
 					while(iterate.hasNext()){
 						String empid=iterate.next().getEmployeeId().getEmployeeId();
+					
 					out.print("<option value="+(char)34+ empid+(char)34+">"+empid+"</option>"); 
 					
 					}
 					
 					
-					}%>
+					}
+					session.removeAttribute("empids");%>
 
 
 

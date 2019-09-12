@@ -17,19 +17,23 @@ import com.cmi.lms.service.AdminCallingRest;
 public class AdminController {
 	@Autowired
 	AdminCallingRest adminRest;
-@RequestMapping(value="createemployee",method = RequestMethod.GET)
-public String createEmployee() {
-	
-	return "redirect:/addemployee.jsp";
-}
-@RequestMapping(value="adddepartment",method = RequestMethod.GET)
-public String addDepartment(HttpSession session) {
-	ArrayList<Login> arraylist=adminRest.getEmployeeId();
-	session.setAttribute("empids", arraylist);
-	return "redirect:/adddepartment.jsp";
-}
-@RequestMapping(value="editEmployee",method = RequestMethod.GET)
-public String editEmployee() {
-	return "redirect:/editEmployee.jsp";
-}
+
+	@RequestMapping(value = "createemployee", method = RequestMethod.GET)
+	public String createEmployee(HttpSession session) {
+		ArrayList<Login> arraylist = adminRest.getEmployeeId();
+		session.setAttribute("empids", arraylist);
+		return "redirect:/addemployee.jsp";
+	}
+
+	@RequestMapping(value = "adddepartment", method = RequestMethod.GET)
+	public String addDepartment(HttpSession session) {
+		ArrayList<Login> arraylist = adminRest.getEmployeeId();
+		session.setAttribute("empids", arraylist);
+		return "redirect:/adddepartment.jsp";
+	}
+
+	@RequestMapping(value = "editEmployee", method = RequestMethod.GET)
+	public String editEmployee() {
+		return "redirect:/editEmployee.jsp";
+	}
 }

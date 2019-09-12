@@ -9,6 +9,7 @@ import com.cmi.lms.beans.BalanceLeaves;
 import com.cmi.lms.beans.Department;
 import com.cmi.lms.beans.Employee;
 import com.cmi.lms.beans.Login;
+import com.cmi.lms.exception.LMSUnAuthorisedException;
 import com.cmi.lms.repository.BalanceRepo;
 import com.cmi.lms.repository.DepartmentRepo;
 import com.cmi.lms.repository.EmpoyleeRepo;
@@ -49,15 +50,13 @@ public class AdminServiceRepo{
 
 	}
 
-	public ArrayList<String> viewDepartment() {
+	public ArrayList<Department> viewDepartment() {
 		ArrayList<Department> al = (ArrayList<Department>) departmentrepo.findAll();
 
-		ArrayList<String> arraylist = new ArrayList<String>();
-		for (int i = 0; i < al.size(); i++) {
-			arraylist.add(al.get(i).getDepartmentId());
-			arraylist.add(al.get(i).getManagerId());
+		if (al == null) {
+			throw new LMSUnAuthorisedException("Invalid Credentials");
 		}
-		return arraylist;
+		return al;
 	}
 
 	public void editAddress(String address, String employeeId) {

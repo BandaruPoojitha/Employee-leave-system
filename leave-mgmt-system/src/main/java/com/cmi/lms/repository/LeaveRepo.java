@@ -20,8 +20,8 @@ public interface LeaveRepo extends CrudRepository<ApplyLeave, Integer> {
 
 	@Transactional
 	@Modifying
-	@Query("update ApplyLeave a set a.applyTo=:managerId where a.sno=:sno")
-	void updateManager(int sno, Employee managerId);
+	@Query("update ApplyLeave a set a.applyTo.employeeId=:managerId where a.sno=:sno")
+	void updateManager(int sno, String managerId);
 
 	@Transactional
 	@Modifying
